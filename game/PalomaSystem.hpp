@@ -9,7 +9,11 @@
 #include "Piggeon.hpp"
 #include "Squirrel.hpp"
 #include <assert.h>
-#define ENTITY_COUNT 100001
+
+#define SQUIRREL_COUNT 3
+#define PALOMAS_COUNT 100000
+
+#define ENTITY_COUNT (PALOMAS_COUNT + SQUIRREL_COUNT)
 
 #define VERTS_PER_QUAD 4
 #define INDICES_PER_QUAD 6
@@ -53,12 +57,20 @@ public:
 		Type = GameObjectTypeEnum::DRAWABLE;
 		_car = car;
 
-		for (int i = 0; i < ENTITY_COUNT - 1; i++)
+		for (int i = 0; i < PALOMAS_COUNT; i++)
 		{
 			Piggeon::Init(&Palomas[i]);
 		}
 
-		Squirrel::Init(&Palomas[ENTITY_COUNT - 1], _car);
+		for(int i = 0; i < SQUIRREL_COUNT; i++)
+		{
+			Squirrel::Init(&Palomas[PALOMAS_COUNT + i], _car);
+			Palomas[PALOMAS_COUNT + i].Dimensions.x = 2045.f + SDL_randf() * (3900.f - 2045.f);
+			Palomas[PALOMAS_COUNT + i].Dimensions.y = 906.f + SDL_randf() * (1991.f - 906.f);
+		}
+
+
+		
 		squirrelPosition.x = Palomas[ENTITY_COUNT - 1].Dimensions.x;
 		squirrelPosition.y = Palomas[ENTITY_COUNT - 1].Dimensions.y;
 
@@ -100,23 +112,23 @@ public:
 			pos.x = worldPosition.x + Palomas[i].Dimensions.x;
 			pos.y = worldPosition.y + Palomas[i].Dimensions.y;
 
-			// if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
-			// 	continue;
+			if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
+				continue;
 		
 			switch (Palomas[i].Type)
 			{
 			case AnimalTypeEnum::Piggeon:
 				paloma = &Palomas[i];
-				distanceV.x = squirrelPosition.x - paloma->Dimensions.x; 
-				distanceV.y = squirrelPosition.y - paloma->Dimensions.y; 
+				// distanceV.x = squirrelPosition.x - paloma->Dimensions.x; 
+				// distanceV.y = squirrelPosition.y - paloma->Dimensions.y; 
 
-				distance = Length2(distanceV);
+				// distance = Length2(distanceV);
 				
-				if(distance < 5000.)
-				{
-					// paloma->elapsedIddleTime = 0;
-					paloma->Animation = (int)PiggeonAnimationEnum::IDLE_2;
-				}
+				// if(distance < 5000.)
+				// {
+				// 	// paloma->elapsedIddleTime = 0;
+				// 	paloma->Animation = (int)PiggeonAnimationEnum::IDLE_2;
+				// }
 
 				Piggeon::UpdateAnimation(paloma, deltaTime, elapsedFrametime);
 
@@ -135,6 +147,8 @@ public:
 				squirrelPosition.y = Palomas[i].Dimensions.y;
 				break;
 			}
+
+			ConstraintObjectsToMap(&Palomas[i]);
 		}
 
 		if (elapsedFrametime > 0.1)
@@ -157,7 +171,7 @@ public:
 			pos.x = worldPosition.x + Palomas[i].Dimensions.x;
 			pos.y = worldPosition.y + Palomas[i].Dimensions.y;
 
-			if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
+			if (pos.x < -100 || pos.y < -100 || pos.x > 880 || pos.y > 780)
 				continue;
 
 			int flip = (Palomas[i].direction.x < 0);
@@ -419,13 +433,10 @@ public:
 		return worldPosition;
 	}
 
-	void ConstraintObjectsToMap()
+	void ConstraintObjectsToMap(Animal* animal)
 	{
-		for (int i = 0; i < ENTITY_COUNT; i++)
-		{
-			Palomas[i].Dimensions.y = SDL_clamp(Palomas[i].Dimensions.y, .5f * Palomas[i].Dimensions.x - 1250, .5f * Palomas[i].Dimensions.x + 1530);
-			Palomas[i].Dimensions.y = SDL_clamp(Palomas[i].Dimensions.y, -.5f * Palomas[i].Dimensions.x + 1930, -.5f * Palomas[i].Dimensions.x + 4670);
-			Palomas[i].Dimensions.x = SDL_clamp(Palomas[i].Dimensions.x, 400, 5912);
-		}
+		animal->Dimensions.y = SDL_clamp(animal->Dimensions.y, .5f * animal->Dimensions.x - 1250, .5f * animal->Dimensions.x + 1530);
+		animal->Dimensions.y = SDL_clamp(animal->Dimensions.y, -.5f * animal->Dimensions.x + 1930, -.5f * animal->Dimensions.x + 4670);
+		animal->Dimensions.x = SDL_clamp(animal->Dimensions.x, 400, 5912);
 	}
 };

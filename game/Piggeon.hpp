@@ -57,17 +57,13 @@ class Piggeon
 		 paloma->Dimensions.y += vecIncrement.y;
 		 paloma->baseY += vecIncrement.y;
 		 paloma->baseDifferenceY = paloma->baseY - paloma->Dimensions.y;
-		 
+
 		 if(paloma->Dimensions.y > paloma->baseY)
 		 {
 		     paloma->velocityY = -15.;
 		     paloma->Dimensions.y = paloma->baseY;
 		     paloma->State = (int)State::IDLE;
 		 }
-
-		 paloma->Dimensions.y = SDL_clamp(paloma->Dimensions.y, .5f * paloma->Dimensions.x - 1250, .5f * paloma->Dimensions.x + 1530);
-		 paloma->Dimensions.y = SDL_clamp(paloma->Dimensions.y, -.5f * paloma->Dimensions.x + 1930, -.5f * paloma->Dimensions.x + 4670);
-		 paloma->Dimensions.x = SDL_clamp(paloma->Dimensions.x, 400, 5912);
 	}
 
     static void UpdateAnimation(Animal* paloma, float deltaTime, float elapsedFrametime)
