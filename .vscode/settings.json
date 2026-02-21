@@ -1,0 +1,9 @@
+{
+	"makefile.launchConfigurations": [
+		{
+			"cwd": "/home/werem/Documents/projects/cpp/SDL3_test",
+			"binaryPath": "/home/werem/Documents/projects/cpp/SDL3_test/main.bin",
+			"binaryArgs": []
+		}
+	]
+}

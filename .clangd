@@ -1,0 +1,5 @@
+CompileFlags:
+  Add:
+    - -std=c++11
+    - -stdlib=libstdc++
+    - --gcc-toolchain=/usr

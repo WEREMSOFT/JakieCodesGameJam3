@@ -1,0 +1,17 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++14",
+      "-g",
+      "-I/usr/local/include",
+      "-o",
+      "main.bin",
+      "main.cpp"
+    ],
+    "directory": "/home/werem/Documents/projects/cpp/SDL3-Test",
+    "file": "/home/werem/Documents/projects/cpp/SDL3-Test/main.cpp",
+    "output": "/home/werem/Documents/projects/cpp/SDL3-Test/main.bin"
+  }
+]

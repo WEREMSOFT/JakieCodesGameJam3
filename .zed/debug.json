@@ -1,0 +1,19 @@
+[
+  {
+    "label": "Debug Program",
+    "build": {
+      "command": "make",
+      "args": ["build", "-j8"],
+      "cwd": "$ZED_WORKTREE_ROOT",
+    },
+    "program": "$ZED_WORKTREE_ROOT/main.bin",
+    "request": "launch",
+    "adapter": "CodeLLDB",
+  },
+  {
+    "label": "Debug No Build",
+    "program": "$ZED_WORKTREE_ROOT/main.bin",
+    "request": "launch",
+    "adapter": "CodeLLDB",
+  },
+]
