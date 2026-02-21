@@ -26,14 +26,14 @@ class Piggeon
         Vector2f distanceV;
         float distance;
         distanceV = (Vector2f){ paloma->Dimensions.x - (_car->Dimensions.x + _car->Dimensions.w * .3f), paloma->Dimensions.y - (_car->Dimensions.y + _car->Dimensions.h * .3f) };
-        distance = Length(distanceV);
+        distance = Length2(distanceV);
               if(paloma->elapsedIddleTime > 2.)
               {
                   paloma->elapsedIddleTime = 0;
                   paloma->Animation = (int)(random() % 2 == 0 ? PiggeonAnimationEnum::IDLE_1 : PiggeonAnimationEnum::IDLE_2);
               }
 
-              if(distance < (_car->honk?120.:50.))
+              if(distance < (_car->honk?14400.:2500.))
               {
               	distanceV = Normalize(distanceV);
                   paloma->State = (int)State::FLYING;
@@ -57,6 +57,7 @@ class Piggeon
 		 paloma->Dimensions.y += vecIncrement.y;
 		 paloma->baseY += vecIncrement.y;
 		 paloma->baseDifferenceY = paloma->baseY - paloma->Dimensions.y;
+		 
 		 if(paloma->Dimensions.y > paloma->baseY)
 		 {
 		     paloma->velocityY = -15.;

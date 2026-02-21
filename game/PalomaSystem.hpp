@@ -41,6 +41,8 @@ class PalomaSystem : public GameObject
 	int textW;
 	int textH;
 
+	Vector2f squirrelPosition = {0};
+
 public:
 	Animal *Palomas;
 	SDL_Texture *Texture;
@@ -57,6 +59,8 @@ public:
 		}
 
 		Squirrel::Init(&Palomas[ENTITY_COUNT - 1], _car);
+		squirrelPosition.x = Palomas[ENTITY_COUNT - 1].Dimensions.x;
+		squirrelPosition.y = Palomas[ENTITY_COUNT - 1].Dimensions.y;
 
 		shadowSource.x = 0;
 		shadowSource.y = 128;
@@ -83,14 +87,12 @@ public:
 	{
 		elapsedFrametime += deltaTime;
 		Animal* paloma;
-		static int palomaSkip = 0;
 
-		palomaSkip++;
-
-		palomaSkip %= 4;
+		Vector2f distanceV = {0};
+		float distance = 0;
 
 		auto worldPosition = GetWorldPositionOffset();
-		SDL_FRect pos = {x: 0, y: 0, w: Palomas->Dimensions.w, h: Palomas->Dimensions.h};
+		SDL_FRect pos = { 0, 0, Palomas->Dimensions.w, Palomas->Dimensions.h};
 		
 		
 		for (int i = 0; i < ENTITY_COUNT; i++)
@@ -98,13 +100,24 @@ public:
 			pos.x = worldPosition.x + Palomas[i].Dimensions.x;
 			pos.y = worldPosition.y + Palomas[i].Dimensions.y;
 
-			if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
-				continue;
+			// if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
+			// 	continue;
 		
 			switch (Palomas[i].Type)
 			{
 			case AnimalTypeEnum::Piggeon:
 				paloma = &Palomas[i];
+				distanceV.x = squirrelPosition.x - paloma->Dimensions.x; 
+				distanceV.y = squirrelPosition.y - paloma->Dimensions.y; 
+
+				distance = Length2(distanceV);
+				
+				if(distance < 5000.)
+				{
+					// paloma->elapsedIddleTime = 0;
+					paloma->Animation = (int)PiggeonAnimationEnum::IDLE_2;
+				}
+
 				Piggeon::UpdateAnimation(paloma, deltaTime, elapsedFrametime);
 
 		        switch (paloma->State) 
@@ -118,6 +131,8 @@ public:
 				break;
 			case AnimalTypeEnum::Squirrel:
 				Squirrel::Update(&Palomas[i], deltaTime, _car, elapsedFrametime, squirrelAnimations);
+				squirrelPosition.x = Palomas[i].Dimensions.x;
+				squirrelPosition.y = Palomas[i].Dimensions.y;
 				break;
 			}
 		}
@@ -135,7 +150,7 @@ public:
 		int sombra_quad_count = 0;
 
 		auto worldPosition = GetWorldPositionOffset();
-		SDL_FRect pos = {x: 0, y: 0, w: Palomas->Dimensions.w, h: Palomas->Dimensions.h};
+		SDL_FRect pos = { 0, 0, Palomas->Dimensions.w, Palomas->Dimensions.h};
 
 		for (int i = 0; i < ENTITY_COUNT; i++)
 		{
@@ -326,7 +341,7 @@ public:
 		int quad_count = 0;
 
 		auto worldPosition = GetWorldPositionOffset();
-		SDL_FRect pos = {x: 0, y: 0, w: palomas->Dimensions.w, h: palomas->Dimensions.h};
+		SDL_FRect pos = { 0, 0, palomas->Dimensions.w, palomas->Dimensions.h};
 
 		for (int i = 0; i < ENTITY_COUNT; i++)
 		{

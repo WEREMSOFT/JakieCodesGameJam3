@@ -12,6 +12,11 @@ float Length(Vector2f v)
     return sqrt(v.x * v.x + v.y * v.y);
 }
 
+float Length2(Vector2f v)
+{
+    return v.x * v.x + v.y * v.y;
+}
+
 Vector2f Normalize(Vector2f v)
 {
     float length = Length(v);

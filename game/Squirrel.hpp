@@ -34,8 +34,8 @@ class Squirrel
             squirrel->baseY = squirrel->Dimensions.y;
         }
 
-        distanceV = (Vector2f){ squirrel->Dimensions.x - (_car->Dimensions.x + _car->Dimensions.w * .5f), squirrel->Dimensions.y - (_car->Dimensions.y + _car->Dimensions.h * .5f) };
-        distance = Length(distanceV);
+		distanceV = (Vector2f){ squirrel->Dimensions.x - (_car->Dimensions.x + _car->Dimensions.w * .3f), squirrel->Dimensions.y - (_car->Dimensions.y + _car->Dimensions.h * .3f) };
+        distance = Length2(distanceV);
 
         switch (squirrel->State) {
             case int(State::IDLE):
@@ -45,7 +45,7 @@ class Squirrel
                     squirrel->Animation = (int)(random() % 2 == 0 ? SquirrelAnimationEnum::IDLE_1 : SquirrelAnimationEnum::IDLE_3);
                 }
 
-  	            if(distance < (_car->honk?120.:50.))
+  	            if(distance < (_car->honk?14400.:2500.))
                 {
                 	distanceV = Normalize(distanceV);
                     squirrel->State = (int)State::FLYING;
