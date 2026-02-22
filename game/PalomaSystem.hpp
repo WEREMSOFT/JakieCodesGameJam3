@@ -10,7 +10,7 @@
 #include "Squirrel.hpp"
 #include <assert.h>
 
-#define SQUIRREL_COUNT 3
+#define SQUIRREL_COUNT 1
 #define PALOMAS_COUNT 100000
 
 #define ENTITY_COUNT (PALOMAS_COUNT + SQUIRREL_COUNT)
@@ -33,6 +33,9 @@ struct IndexSOA
 class PalomaSystem : public GameObject
 {
 	float elapsedFrametime = 0;
+	float elapsedSignalTime = 0;
+	int previousSquirrelState = (int)State::IDLE;
+	bool emmitSignal = true;
 	Car *_car;
 	SDL_FRect shadowSource = {0};
 	AnimationDefinition squirrelAnimations[(int)SquirrelAnimationEnum::COUNT] = {0};
@@ -98,6 +101,7 @@ public:
 	void Update(float deltaTime) override
 	{
 		elapsedFrametime += deltaTime;
+		elapsedSignalTime += deltaTime * 10.;
 
 		Vector2f distanceV = {0};
 		float distance = 0;
@@ -111,8 +115,8 @@ public:
 			pos.x = worldPosition.x + Palomas[i].Dimensions.x;
 			pos.y = worldPosition.y + Palomas[i].Dimensions.y;
 
-			if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
-				continue;
+			// if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
+			// 	continue;
 		
 			switch (Palomas[i].Type)
 			{
@@ -127,11 +131,21 @@ public:
 		            case (int)State::FLYING:
 		            	Piggeon::UpdateStateFlying(&Palomas[i], deltaTime);
 		        }
+
+				if(emmitSignal)
+					ResetAnimationBasedOnPosition(&Palomas[i], squirrelPosition);
+
 				break;
 			case AnimalTypeEnum::Squirrel:
+				previousSquirrelState = Palomas[i].State;
 				Squirrel::Update(&Palomas[i], deltaTime, _car, elapsedFrametime, squirrelAnimations);
-				squirrelPosition.x = Palomas[i].Dimensions.x;
-				squirrelPosition.y = Palomas[i].Dimensions.y;
+				if(previousSquirrelState != Palomas[i].State)
+				{
+					squirrelPosition.x = Palomas[i].Dimensions.x;
+					squirrelPosition.y = Palomas[i].Dimensions.y;
+					emmitSignal = true;
+					elapsedSignalTime = 0;
+				}
 				break;
 			}
 
@@ -143,7 +157,30 @@ public:
 			elapsedFrametime = 0;
 			qsort(Palomas, ENTITY_COUNT, sizeof(Animal), comparePaloma);
 		}
+
+		if(elapsedSignalTime > 500.0)
+		{
+			emmitSignal = false;
+		}
 	}
+
+	void ResetAnimationBasedOnPosition(Animal* animal, Vector2f position)
+	{
+		Vector2f distanceV = {animal->Dimensions.x - position.x, animal->Dimensions.y - position.y};
+		float distance = Length2(distanceV);
+
+		float sinElapsedTime  = sin(elapsedSignalTime);
+
+		if(distance > 5000. * elapsedSignalTime && distance < 5010. * elapsedSignalTime )
+		{
+			if(animal->State == (int)State::IDLE)
+			{
+				animal->Animation = (int)PiggeonAnimationEnum::IDLE_2;
+			}
+			animal->elapsedIddleTime = 0.;
+		} 
+	}
+
 
 	void Draw(SDL_Renderer *renderer) override
 	{
@@ -422,8 +459,16 @@ public:
 
 	void ConstraintObjectsToMap(Animal* animal)
 	{
+		Vector2f prevPosition = {animal->Dimensions.x, animal->Dimensions.y};
 		animal->Dimensions.y = SDL_clamp(animal->Dimensions.y, .5f * animal->Dimensions.x - 1250, .5f * animal->Dimensions.x + 1530);
 		animal->Dimensions.y = SDL_clamp(animal->Dimensions.y, -.5f * animal->Dimensions.x + 1930, -.5f * animal->Dimensions.x + 4670);
 		animal->Dimensions.x = SDL_clamp(animal->Dimensions.x, 400, 5912);
+
+		if(animal->Dimensions.x != prevPosition.x || animal->Dimensions.y != prevPosition.y)
+		{
+			animal->Angle += M_PI;
+			animal->direction = Rotate(animal->direction, animal->Angle);
+		}
+
 	}
 };

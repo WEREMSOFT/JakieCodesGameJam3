@@ -61,7 +61,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         return SDL_APP_FAILURE;
     }
 
-    if (!SDL_CreateWindowAndRenderer("Zombie Car Survival!!", 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE, &window, &renderer)) {
+    if (!SDL_CreateWindowAndRenderer("Squirrel Herding!!!", 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE, &window, &renderer)) {
         SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
@@ -69,7 +69,6 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 	SDL_PropertiesID props = SDL_GetRendererProperties(renderer);
 	char* renderName = (char *)SDL_GetStringProperty(props, SDL_PROP_RENDERER_NAME_STRING, 0);
 
-	printf("render name: %s\n", renderName);
 
     SDL_SetRenderLogicalPresentation(renderer, 800, 600, SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
