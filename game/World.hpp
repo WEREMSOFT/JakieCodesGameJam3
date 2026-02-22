@@ -3,6 +3,7 @@
 #include "Car.hpp"
 #include "BackGround.hpp"
 #include "ForeGround.hpp"
+#include "SplashScreen.hpp"
 #include "PalomaSystem.hpp"
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_stdinc.h>
@@ -10,9 +11,11 @@
 class World: public GameObject
 {
     SDL_Texture *texture = NULL;
+    SDL_Texture *splashScreenTexture = NULL;
     Car* _car;
     BackGround* _backGround;
     PalomaSystem* _palomaSystem;
+	bool showSplashScreen = true;
 
     public:
         World(SDL_Renderer* renderer)
@@ -49,7 +52,48 @@ class World: public GameObject
 
             auto treesFront = new ForeGround(renderer);
             AddChild(treesFront);
+
+			CreateSplashScreen(renderer);
+
+			// auto splashScreen = new SplashScreen(renderer);
+			
+            // splashScreen->Dimensions.x = _backGround->Dimensions.w / 2.;
+			// splashScreen->Dimensions.x += (1991.f - 906.f) + 200;
+            // splashScreen->Dimensions.y = _backGround->Dimensions.h / 2.;
+
+			// AddChild(splashScreen);
         }
+
+		void CreateSplashScreen(SDL_Renderer* renderer)
+		{
+			SDL_Point texture_size = {0};
+
+			char* pngPath = NULL;
+
+			SDL_asprintf(&pngPath, "%sAssets/Instructions.png", SDL_GetBasePath());
+
+			SDL_Surface* surface = SDL_LoadPNG(pngPath);
+
+			SDL_free(pngPath);
+
+			texture_size.x = surface->w;
+			texture_size.y = surface->h;
+
+			Dimensions.w = SourceRect.w = surface->w;
+			Dimensions.h = SourceRect.h = surface->h;
+			SourceRect.x = 0;
+			SourceRect.y = 0;
+
+			splashScreenTexture = SDL_CreateTextureFromSurface(renderer, surface);
+
+			SDL_DestroySurface(surface);
+		}
+
+		void DrawSplashScreen(SDL_Renderer* renderer)
+		{
+			SDL_FRect position = {(800 - 320) / 2, (600 - 240) / 2, 320, 240};
+			SDL_RenderTexture(renderer, splashScreenTexture, NULL, &position);
+		}
 
         ~World()
         {
@@ -64,19 +108,32 @@ class World: public GameObject
             // Camera follows car
             Dimensions.x = -_car->Dimensions.x + 412;
             Dimensions.y = -_car->Dimensions.y + 300;
+
+			const bool* keys = SDL_GetKeyboardState(NULL);
+
+            if(keys[SDL_SCANCODE_SPACE])
+            {
+                showSplashScreen = false;
+            }
         }
 
         void Draw(SDL_Renderer* renderer) override
         {
             GameObject::Draw(renderer);
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);  /* white, full alpha */
+			if(showSplashScreen)
+				DrawSplashScreen(renderer);
+
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); 
             SDL_RenderDebugText(renderer, 0, 0, "Esc to quit(on desktop)");
             SDL_RenderDebugText(renderer, 0, 40, "WASD to accelerate, break and turn. H for horn.");
             SDL_RenderDebugText(renderer, 0, 60, "Try to herd the squirrel to the LEFT through the piggeons.");
 
-            char carPositionText[300] = {0};
-            snprintf(carPositionText, 300, "Car Position: %.2f, %.2f", _car->Dimensions.x, _car->Dimensions.y);
-
-            SDL_RenderDebugText(renderer, 0, 20, carPositionText);
+            // char carPositionText[300] = {0};
+            // snprintf(carPositionText, 300, "Car Position: %.2f, %.2f", _car->Dimensions.x, _car->Dimensions.y);
+            // SDL_RenderDebugText(renderer, 0, 20, carPositionText);
+			
+			char startledPiggeonsText[300] = {0};
+            snprintf(startledPiggeonsText, 300, "Startled Piggeons %d", _palomaSystem->startledPiggeons);
+            SDL_RenderDebugText(renderer, 0, 80, startledPiggeonsText);
         }
 };

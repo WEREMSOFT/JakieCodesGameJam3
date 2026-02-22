@@ -51,6 +51,7 @@ class PalomaSystem : public GameObject
 	Vector2f squirrelPosition = {0};
 
 public:
+	int startledPiggeons = 0;
 	Animal *Palomas;
 	SDL_Texture *Texture;
 	PalomaSystem(SDL_Texture *texture, Car *car)
@@ -68,8 +69,10 @@ public:
 		for(int i = 0; i < SQUIRREL_COUNT; i++)
 		{
 			Squirrel::Init(&Palomas[PALOMAS_COUNT + i], _car);
-			Palomas[PALOMAS_COUNT + i].Dimensions.x = 2045.f + SDL_randf() * (3900.f - 2045.f);
-			Palomas[PALOMAS_COUNT + i].Dimensions.y = 906.f + SDL_randf() * (1991.f - 906.f);
+			#define SQUIRREL_STARTING_COORD_X 3545.f
+			#define SQUIRREL_STARTING_COORD_Y 1206.f
+			Palomas[PALOMAS_COUNT + i].Dimensions.x = SQUIRREL_STARTING_COORD_X + SDL_randf() * (3900.f - SQUIRREL_STARTING_COORD_X);
+			Palomas[PALOMAS_COUNT + i].Dimensions.y = SQUIRREL_STARTING_COORD_Y + SDL_randf() * (1991.f - SQUIRREL_STARTING_COORD_Y);
 		}
 
 
@@ -127,6 +130,10 @@ public:
 		        {
 		            case int(State::IDLE):
 	            		Piggeon::UpdateStateIdle(&Palomas[i], _car);
+						if(Palomas[i].State == (int)State::FLYING)
+						{
+							startledPiggeons++;
+						}
 		                break;
 		            case (int)State::FLYING:
 		            	Piggeon::UpdateStateFlying(&Palomas[i], deltaTime);
