@@ -98,7 +98,6 @@ public:
 	void Update(float deltaTime) override
 	{
 		elapsedFrametime += deltaTime;
-		Animal* paloma;
 
 		Vector2f distanceV = {0};
 		float distance = 0;
@@ -118,27 +117,15 @@ public:
 			switch (Palomas[i].Type)
 			{
 			case AnimalTypeEnum::Piggeon:
-				paloma = &Palomas[i];
-				// distanceV.x = squirrelPosition.x - paloma->Dimensions.x; 
-				// distanceV.y = squirrelPosition.y - paloma->Dimensions.y; 
+				Piggeon::UpdateAnimation(&Palomas[i], deltaTime, elapsedFrametime);
 
-				// distance = Length2(distanceV);
-				
-				// if(distance < 5000.)
-				// {
-				// 	// paloma->elapsedIddleTime = 0;
-				// 	paloma->Animation = (int)PiggeonAnimationEnum::IDLE_2;
-				// }
-
-				Piggeon::UpdateAnimation(paloma, deltaTime, elapsedFrametime);
-
-		        switch (paloma->State) 
+		        switch (Palomas[i].State) 
 		        {
 		            case int(State::IDLE):
-	            		Piggeon::UpdateStateIdle(paloma, _car);
+	            		Piggeon::UpdateStateIdle(&Palomas[i], _car);
 		                break;
 		            case (int)State::FLYING:
-		            	Piggeon::UpdateStateFlying(paloma, deltaTime);
+		            	Piggeon::UpdateStateFlying(&Palomas[i], deltaTime);
 		        }
 				break;
 			case AnimalTypeEnum::Squirrel:
