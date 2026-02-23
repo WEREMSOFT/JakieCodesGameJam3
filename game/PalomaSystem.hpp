@@ -156,7 +156,8 @@ public:
 				break;
 			}
 
-			ConstraintObjectsToMap(&Palomas[i]);
+			ConstraintObjectsToMap(&Palomas[i].Dimensions, &Palomas[i].Angle, &Palomas[i].direction);
+			ConstraintCarToMap(&_car->Dimensions);
 		}
 
 		if (elapsedFrametime > 0.1)
@@ -464,18 +465,25 @@ public:
 		return worldPosition;
 	}
 
-	void ConstraintObjectsToMap(Animal* animal)
+	void ConstraintObjectsToMap(SDL_FRect* location, float* angle, Vector2f* direction)
 	{
-		Vector2f prevPosition = {animal->Dimensions.x, animal->Dimensions.y};
-		animal->Dimensions.y = SDL_clamp(animal->Dimensions.y, .5f * animal->Dimensions.x - 1250, .5f * animal->Dimensions.x + 1530);
-		animal->Dimensions.y = SDL_clamp(animal->Dimensions.y, -.5f * animal->Dimensions.x + 1930, -.5f * animal->Dimensions.x + 4670);
-		animal->Dimensions.x = SDL_clamp(animal->Dimensions.x, 400, 5912);
+		Vector2f prevPosition = {location->x, location->y};
+		location->y = SDL_clamp(location->y, .5f * location->x - 1250, .5f * location->x + 1240);
+		location->y = SDL_clamp(location->y, -.5f * location->x + 1930, -.5f * location->x + 4430);
+		location->x = SDL_clamp(location->x, 724, 5580);
 
-		if(animal->Dimensions.x != prevPosition.x || animal->Dimensions.y != prevPosition.y)
+		if(location->x != prevPosition.x || location->y != prevPosition.y)
 		{
-			animal->Angle += M_PI;
-			animal->direction = Rotate(animal->direction, animal->Angle);
+			*angle += M_PI;
+			*direction = Rotate(*direction, *angle);
 		}
+	}
 
+	void ConstraintCarToMap(SDL_FRect* location)
+	{
+		Vector2f prevPosition = {location->x, location->y};
+		location->y = SDL_clamp(location->y, .5f * location->x - 1250, .5f * location->x + 1200);
+		location->y = SDL_clamp(location->y, -.5f * location->x + 1930, -.5f * location->x + 4350);
+		location->x = SDL_clamp(location->x, 724, 5580);
 	}
 };

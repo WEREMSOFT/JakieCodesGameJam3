@@ -128,9 +128,9 @@ class World: public GameObject
             SDL_RenderDebugText(renderer, 0, 40, "WASD to accelerate, break and turn. H for horn.");
             SDL_RenderDebugText(renderer, 0, 60, "Try to herd the squirrel to the LEFT through the piggeons.");
 
-            // char carPositionText[300] = {0};
-            // snprintf(carPositionText, 300, "Car Position: %.2f, %.2f", _car->Dimensions.x, _car->Dimensions.y);
-            // SDL_RenderDebugText(renderer, 0, 20, carPositionText);
+            char carPositionText[300] = {0};
+            snprintf(carPositionText, 300, "Car Position: %.2f, %.2f", _car->Dimensions.x, _car->Dimensions.y);
+            SDL_RenderDebugText(renderer, 0, 20, carPositionText);
 			
 			char startledPiggeonsText[300] = {0};
             snprintf(startledPiggeonsText, 300, "Startled Piggeons %d", _palomaSystem->startledPiggeons);
