@@ -34,11 +34,6 @@ class KeyboardBehavior: public GameObject
 
             const bool* keys = SDL_GetKeyboardState(NULL);
 
-            if(keys[SDL_SCANCODE_SPACE])
-            {
-                Parent->Angle = M_PI;
-            }
-
             if (keys[SDL_SCANCODE_D]) {
                 Parent->Angle += movingParent->AngularVelocity * deltaTime;
             }

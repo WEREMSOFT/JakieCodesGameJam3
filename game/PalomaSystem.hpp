@@ -169,7 +169,7 @@ public:
 			qsort(Palomas, ENTITY_COUNT, sizeof(Animal), comparePaloma);
 		}
 
-		if(elapsedSignalTime > 500.0)
+		if(elapsedSignalTime > 100.0)
 		{
 			elapsedSignalTime = 0;
 			// emmitSignal = false;
@@ -183,7 +183,7 @@ public:
 
 		float sinElapsedTime  = sin(elapsedSignalTime);
 
-		if(distance > 5000. * elapsedSignalTime && distance < 5010. * elapsedSignalTime )
+		if(distance > 5000. * elapsedSignalTime && distance < 5001. * elapsedSignalTime )
 		{
 			if(animal->State == (int)State::IDLE)
 			{

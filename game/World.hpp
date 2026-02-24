@@ -25,15 +25,13 @@ class World: public GameObject
             Tag = "World";
 
             _backGround = new BackGround(renderer);
-            Dimensions.x = -_backGround->Dimensions.w / 2.;
-            Dimensions.y = -_backGround->Dimensions.h / 2.;
             AddChild(_backGround);
 
             _car = new Car(renderer);
-            _car->Dimensions.x = _backGround->Dimensions.w / 2.;
-            _car->Dimensions.y = _backGround->Dimensions.h / 2.;
+            _car->Dimensions.x = 5096.;
+            _car->Dimensions.y = 1561.;
 
-            _car->Dimensions.x += (1991.f - 906.f) + 200;
+			_car->Angle = -M_PI / 2;
 
             char* pngPath = NULL;
 
@@ -54,14 +52,6 @@ class World: public GameObject
             AddChild(treesFront);
 
 			CreateSplashScreen(renderer);
-
-			// auto splashScreen = new SplashScreen(renderer);
-			
-            // splashScreen->Dimensions.x = _backGround->Dimensions.w / 2.;
-			// splashScreen->Dimensions.x += (1991.f - 906.f) + 200;
-            // splashScreen->Dimensions.y = _backGround->Dimensions.h / 2.;
-
-			// AddChild(splashScreen);
         }
 
 		void CreateSplashScreen(SDL_Renderer* renderer)
