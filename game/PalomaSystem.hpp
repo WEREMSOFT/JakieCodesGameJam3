@@ -142,7 +142,7 @@ public:
 		            	Piggeon::UpdateStateFlying(&Palomas[i], deltaTime);
 		        }
 
-				if(emmitSignal)
+				// if(emmitSignal)
 					ResetAnimationBasedOnPosition(&Palomas[i], squirrelPosition);
 
 				break;
@@ -171,7 +171,8 @@ public:
 
 		if(elapsedSignalTime > 500.0)
 		{
-			emmitSignal = false;
+			elapsedSignalTime = 0;
+			// emmitSignal = false;
 		}
 	}
 
