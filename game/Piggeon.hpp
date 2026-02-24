@@ -14,8 +14,8 @@ class Piggeon
         paloma->SourceRect.x = 0;
         paloma->SourceRect.y = 0;
 
-        float piggeonX = SDL_randf() * 1700.;
-        float piggeonY = SDL_randf() * 1700.;
+        float piggeonX = SDL_randf() * 2500.;
+        float piggeonY = SDL_randf() * 2500.;
 
 		Vector2f rotatedPosition = {piggeonX, piggeonY};
 
