@@ -11,7 +11,7 @@
 #include <assert.h>
 
 #define SQUIRREL_COUNT 1
-#define PALOMAS_COUNT 100000
+#define PALOMAS_COUNT 200000
 
 #define ENTITY_COUNT (PALOMAS_COUNT + SQUIRREL_COUNT)
 
@@ -118,8 +118,8 @@ public:
 			pos.x = worldPosition.x + Palomas[i].Dimensions.x;
 			pos.y = worldPosition.y + Palomas[i].Dimensions.y;
 
-			// if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
-			// 	continue;
+			if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
+			continue;
 		
 			switch (Palomas[i].Type)
 			{
