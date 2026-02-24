@@ -52,4 +52,5 @@ struct Animal
     float velocityY;
     float baseDifferenceY;
     float Velocity;
+	bool startled;
 };

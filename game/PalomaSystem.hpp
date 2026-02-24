@@ -104,7 +104,7 @@ public:
 	void Update(float deltaTime) override
 	{
 		elapsedFrametime += deltaTime;
-		elapsedSignalTime += deltaTime * 10.;
+		elapsedSignalTime += deltaTime * 50.;
 
 		Vector2f distanceV = {0};
 		float distance = 0;
@@ -129,12 +129,15 @@ public:
 		        switch (Palomas[i].State) 
 		        {
 		            case int(State::IDLE):
+						// if(emmitSignal)
+						ResetAnimationBasedOnPosition(&Palomas[i], squirrelPosition);
             			if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
 							continue;
 
 	            		Piggeon::UpdateStateIdle(&Palomas[i], _car);
-						if(Palomas[i].State == (int)State::FLYING)
+						if(Palomas[i].State == (int)State::FLYING && !Palomas[i].startled)
 						{
+							Palomas[i].startled = true;
 							startledPiggeons++;
 						}
 		                break;
@@ -142,8 +145,7 @@ public:
 		            	Piggeon::UpdateStateFlying(&Palomas[i], deltaTime);
 		        }
 
-				// if(emmitSignal)
-					ResetAnimationBasedOnPosition(&Palomas[i], squirrelPosition);
+
 
 				break;
 			case AnimalTypeEnum::Squirrel:
@@ -169,7 +171,7 @@ public:
 			qsort(Palomas, ENTITY_COUNT, sizeof(Animal), comparePaloma);
 		}
 
-		if(elapsedSignalTime > 100.0)
+		if(elapsedSignalTime > 500.0)
 		{
 			elapsedSignalTime = 0;
 			// emmitSignal = false;
@@ -183,7 +185,7 @@ public:
 
 		float sinElapsedTime  = sin(elapsedSignalTime);
 
-		if(distance > 5000. * elapsedSignalTime && distance < 5001. * elapsedSignalTime )
+		if(distance > 5000. * elapsedSignalTime && distance < 5070. * elapsedSignalTime )
 		{
 			if(animal->State == (int)State::IDLE)
 			{
