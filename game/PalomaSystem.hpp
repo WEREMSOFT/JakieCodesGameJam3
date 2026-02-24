@@ -118,8 +118,8 @@ public:
 			pos.x = worldPosition.x + Palomas[i].Dimensions.x;
 			pos.y = worldPosition.y + Palomas[i].Dimensions.y;
 
-			if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
-			continue;
+			// if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
+			// continue;
 		
 			switch (Palomas[i].Type)
 			{
@@ -129,6 +129,9 @@ public:
 		        switch (Palomas[i].State) 
 		        {
 		            case int(State::IDLE):
+            			if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
+							continue;
+
 	            		Piggeon::UpdateStateIdle(&Palomas[i], _car);
 						if(Palomas[i].State == (int)State::FLYING)
 						{
