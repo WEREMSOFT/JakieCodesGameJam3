@@ -22,7 +22,7 @@ class Piggeon
 		rotatedPosition = Rotate(rotatedPosition, M_PI / 4.);
 
         paloma->Dimensions.x = rotatedPosition.x + 3200.;
-        paloma->Dimensions.y = rotatedPosition.y + 400.;
+        paloma->Dimensions.y = rotatedPosition.y * 0.5  + 400.;
     }
 
 	static void UpdateStateIdle(Animal* paloma, Car* _car)
