@@ -156,8 +156,8 @@ public:
 				break;
 			}
 
-			ConstraintObjectsToMap(&Palomas[i].Dimensions, &Palomas[i].Angle, &Palomas[i].direction);
-			ConstraintCarToMap(&_car->Dimensions);
+			// ConstraintObjectsToMap(&Palomas[i].Dimensions, &Palomas[i].Angle, &Palomas[i].direction);
+			// ConstraintCarToMap(&_car->Dimensions);
 		}
 
 		if (elapsedFrametime > 0.1)

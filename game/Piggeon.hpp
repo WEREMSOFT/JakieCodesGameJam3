@@ -14,11 +14,15 @@ class Piggeon
         paloma->SourceRect.x = 0;
         paloma->SourceRect.y = 0;
 
-        float piggeonX = 2045.f + SDL_randf() * (3900.f - 2045.f);
-        float piggeonY = 906.f + SDL_randf() * (1991.f - 906.f);
+        float piggeonX = SDL_randf() * (3900.f - 2045.f);
+        float piggeonY = SDL_randf() * (1991.f - 906.f);
 
-        paloma->Dimensions.x = piggeonX;
-        paloma->Dimensions.y = piggeonY;
+		Vector2f rotatedPosition = {piggeonX, piggeonY};
+
+		rotatedPosition = Rotate(rotatedPosition, M_PI / 4.);
+
+        paloma->Dimensions.x = rotatedPosition.x + 3200.;
+        paloma->Dimensions.y = rotatedPosition.y + 744.;
     }
 
 	static void UpdateStateIdle(Animal* paloma, Car* _car)
