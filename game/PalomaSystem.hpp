@@ -510,8 +510,8 @@ public:
 		} 
 		else 
 		{
-			location->y = SDL_clamp(location->y, .5f * location->x - 1250, .5f * location->x + 1200);
-			location->y = SDL_clamp(location->y, -.5f * location->x + 1930, -.5f * location->x + 4350);
+			location->y = SDL_clamp(location->y, .5f * location->x - 1250, .5f * location->x + 1240);
+			location->y = SDL_clamp(location->y, -.5f * location->x + 1930, -.5f * location->x + 4430);
 			location->x = SDL_clamp(location->x, 724, 5580);
 		}
 
