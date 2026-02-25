@@ -476,9 +476,30 @@ public:
 	void ConstraintObjectsToMap(SDL_FRect* location, float* angle, Vector2f* direction)
 	{
 		Vector2f prevPosition = {location->x, location->y};
-		location->y = SDL_clamp(location->y, .5f * location->x - 1250, .5f * location->x + 1240);
-		location->y = SDL_clamp(location->y, -.5f * location->x + 1930, -.5f * location->x + 4430);
-		location->x = SDL_clamp(location->x, 724, 5580);
+		// location->y = SDL_clamp(location->y, .5f * location->x - 1250, .5f * location->x + 1240);
+		// location->y = SDL_clamp(location->y, -.5f * location->x + 1930, -.5f * location->x + 4430);
+		// location->x = SDL_clamp(location->x, 724, 5580);
+
+		if(location->x < 1135)
+		{
+			if(location->y >= 1498)
+			{
+				location->y = SDL_clamp(location->y, .5f * location->x - 1250, .5f * location->x + 1200);
+				location->y = SDL_clamp(location->y, -.5f * location->x + 2115, -.5f * location->x + 4350);
+				location->x = SDL_clamp(location->x, 930, 5580);
+			} else 
+			{
+				location->y = SDL_clamp(location->y, .5f * location->x - 1250, .5f * location->x + 930);
+				location->y = SDL_clamp(location->y, -.5f * location->x + 1930, -.5f * location->x + 4350);
+				location->x = SDL_clamp(location->x, 1000, 5580);
+			}
+		} 
+		else 
+		{
+			location->y = SDL_clamp(location->y, .5f * location->x - 1250, .5f * location->x + 1200);
+			location->y = SDL_clamp(location->y, -.5f * location->x + 1930, -.5f * location->x + 4350);
+			location->x = SDL_clamp(location->x, 724, 5580);
+		}
 
 		if(location->x != prevPosition.x || location->y != prevPosition.y)
 		{
