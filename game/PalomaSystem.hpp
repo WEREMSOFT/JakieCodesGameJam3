@@ -145,7 +145,7 @@ public:
 		            	Piggeon::UpdateStateFlying(&Palomas[i], deltaTime);
 		        }
 
-
+				ConstraintObjectsToMap(&Palomas[i].Dimensions, &Palomas[i].Angle, &Palomas[i].direction);
 
 				break;
 			case AnimalTypeEnum::Squirrel:
@@ -160,10 +160,10 @@ public:
 				// }
 				squirrelPosition.x = Palomas[i].Dimensions.x;
 				squirrelPosition.y = Palomas[i].Dimensions.y;
+				ConstraintSquirrelToMap(&Palomas[i].Dimensions, &Palomas[i].Angle, &Palomas[i].direction);
 				break;
 			}
 
-			ConstraintObjectsToMap(&Palomas[i].Dimensions, &Palomas[i].Angle, &Palomas[i].direction);
 			ConstraintCarToMap(&_car->Dimensions);
 		}
 
@@ -473,6 +473,20 @@ public:
 		return worldPosition;
 	}
 
+	void ConstraintSquirrelToMap(SDL_FRect* location, float* angle, Vector2f* direction)
+	{
+		Vector2f prevPosition = {location->x, location->y};
+		location->y = SDL_clamp(location->y, .5f * location->x - 1250, .5f * location->x + 1240);
+		location->y = SDL_clamp(location->y, -.5f * location->x + 1930, -.5f * location->x + 4430);
+		location->x = SDL_clamp(location->x, 724, 5580);
+
+		if(location->x != prevPosition.x || location->y != prevPosition.y)
+		{
+			*angle += M_PI;
+			*direction = Rotate(*direction, *angle);
+		}
+	}
+
 	void ConstraintObjectsToMap(SDL_FRect* location, float* angle, Vector2f* direction)
 	{
 		Vector2f prevPosition = {location->x, location->y};
@@ -480,12 +494,12 @@ public:
 		// location->y = SDL_clamp(location->y, -.5f * location->x + 1930, -.5f * location->x + 4430);
 		// location->x = SDL_clamp(location->x, 724, 5580);
 
-		if(location->x < 1135)
+		if(location->x < 1150)
 		{
 			if(location->y >= 1498)
 			{
 				location->y = SDL_clamp(location->y, .5f * location->x - 1250, .5f * location->x + 1200);
-				location->y = SDL_clamp(location->y, -.5f * location->x + 2115, -.5f * location->x + 4350);
+				location->y = SDL_clamp(location->y, -.5f * location->x + 2150, -.5f * location->x + 4350);
 				location->x = SDL_clamp(location->x, 930, 5580);
 			} else 
 			{

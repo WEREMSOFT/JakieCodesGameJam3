@@ -124,7 +124,7 @@ class World: public GameObject
             snprintf(startledPiggeonsText, 300, "Startled Piggeons %d(%.2f%%)", _palomaSystem->startledPiggeons, (_palomaSystem->startledPiggeons / (float)PALOMAS_COUNT) * 100.);
             SDL_RenderDebugText(renderer, 0, 80, startledPiggeonsText);
 
-            if(_palomaSystem->squirrelPosition.x < 935)
+            if(_palomaSystem->squirrelPosition.x < 1150)
        		{
        			SDL_RenderDebugText(renderer, 100, 100, "YOU CATCHED THE SQUIRREL!!");
        		} else {
