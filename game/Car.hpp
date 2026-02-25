@@ -44,6 +44,10 @@ class Car: public MovingGameObject
             AddChild(new KeyboardBehavior(&honk));
 
             SDL_DestroySurface(surface);
+
+			Dimensions.x = 1596.;
+			// Dimensions.x = 5096.;
+            Dimensions.y = 1561.;
         }
 
         void Update(float deltaTime) override

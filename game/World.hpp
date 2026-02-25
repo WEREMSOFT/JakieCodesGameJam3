@@ -28,8 +28,6 @@ class World: public GameObject
             AddChild(_backGround);
 
             _car = new Car(renderer);
-            _car->Dimensions.x = 5096.;
-            _car->Dimensions.y = 1561.;
 
 			_car->Angle = -M_PI / 2;
 
