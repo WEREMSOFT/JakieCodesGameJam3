@@ -48,9 +48,9 @@ class PalomaSystem : public GameObject
 	int textW;
 	int textH;
 
-	Vector2f squirrelPosition = {0};
 
 public:
+	Vector2f squirrelPosition = {0};
 	int startledPiggeons = 0;
 	Animal *Palomas;
 	SDL_Texture *Texture;
@@ -151,13 +151,15 @@ public:
 			case AnimalTypeEnum::Squirrel:
 				previousSquirrelState = Palomas[i].State;
 				Squirrel::Update(&Palomas[i], deltaTime, _car, elapsedFrametime, squirrelAnimations);
-				if(previousSquirrelState != Palomas[i].State)
-				{
-					squirrelPosition.x = Palomas[i].Dimensions.x;
-					squirrelPosition.y = Palomas[i].Dimensions.y;
-					emmitSignal = true;
-					elapsedSignalTime = 0;
-				}
+				// if(previousSquirrelState != Palomas[i].State)
+				// {
+					// squirrelPosition.x = Palomas[i].Dimensions.x;
+					// squirrelPosition.y = Palomas[i].Dimensions.y;
+					// emmitSignal = true;
+					// elapsedSignalTime = 0;
+				// }
+				squirrelPosition.x = Palomas[i].Dimensions.x;
+				squirrelPosition.y = Palomas[i].Dimensions.y;
 				break;
 			}
 
