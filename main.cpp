@@ -153,7 +153,10 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     world->Update(deltaTime);
     world->Draw(renderer);
 
-    printFPSInformation(renderer, deltaTime);
+	if(world->showDebuginformation)
+	{
+		printFPSInformation(renderer, deltaTime);
+	}
 
 	
 

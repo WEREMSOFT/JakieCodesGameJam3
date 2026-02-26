@@ -104,7 +104,8 @@ public:
 	void Update(float deltaTime) override
 	{
 		elapsedFrametime += deltaTime;
-		elapsedSignalTime += deltaTime * 50.;
+		// elapsedSignalTime += deltaTime * 50.;
+		elapsedSignalTime += deltaTime;
 
 		Vector2f distanceV = {0};
 		float distance = 0;
@@ -130,7 +131,7 @@ public:
 		        {
 		            case int(State::IDLE):
 						// if(emmitSignal)
-						ResetAnimationBasedOnPosition(&Palomas[i], squirrelPosition);
+						// ResetAnimationBasedOnPosition(&Palomas[i], squirrelPosition);
             			if (pos.x < -15 || pos.y < -15 || pos.x > 780 || pos.y > 680)
 							continue;
 
@@ -264,6 +265,8 @@ public:
 				quad_count * 4,
 				palomasSOA.g_idx, quad_count * 6, sizeof(Uint32));
 		}
+
+		DrawSignalIndicator(renderer);
 	}
 
 	void InitQuadIndicesSOA(void)
@@ -544,5 +547,34 @@ public:
 			location->y = SDL_clamp(location->y, -.5f * location->x + 1930, -.5f * location->x + 4350);
 			location->x = SDL_clamp(location->x, 724, 5580);
 		}
+	}
+
+	void DrawSignalIndicator(SDL_Renderer* renderer)
+	{
+		auto distance = Length({squirrelPosition.x - _car->Dimensions.x, squirrelPosition.y - _car->Dimensions.y});
+		static float frame = 0;
+		static bool lightOn = false;
+
+		if(lightOn)
+		{
+			frame = 1;
+			if(elapsedSignalTime > .1)
+			{
+				elapsedSignalTime = 0;
+				lightOn = false;
+			} 
+		} else
+		{
+			frame = 0;
+			if(elapsedSignalTime >= distance / 1000.)
+			{
+				elapsedSignalTime = 0;
+				lightOn = true;
+			}
+		}
+
+		SDL_FRect srcRect = {32 * frame, 384, 32, 32};
+		SDL_FRect dstRect = {400-16, 0, 32, 32};
+		SDL_RenderTexture(renderer, Texture, &srcRect, &dstRect);  
 	}
 };

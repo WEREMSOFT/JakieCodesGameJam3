@@ -4,6 +4,11 @@
 			"cwd": "/home/werem/Documents/projects/cpp/SDL3_test",
 			"binaryPath": "/home/werem/Documents/projects/cpp/SDL3_test/main.bin",
 			"binaryArgs": []
+		},
+		{
+			"cwd": "/home/werem/Documents/projects/cpp/JakieCodesGameJam3",
+			"binaryPath": "/home/werem/Documents/projects/cpp/JakieCodesGameJam3/main.bin",
+			"binaryArgs": []
 		}
 	]
 }

@@ -16,8 +16,10 @@ class World: public GameObject
     BackGround* _backGround;
     PalomaSystem* _palomaSystem;
 	bool showSplashScreen = true;
-
+	
     public:
+		bool showDebuginformation = false;
+
         World(SDL_Renderer* renderer)
         {
             Type = GameObjectTypeEnum::DRAWABLE;
@@ -103,6 +105,14 @@ class World: public GameObject
             {
                 showSplashScreen = false;
             }
+
+            if (keys[SDL_SCANCODE_1]) {
+				showDebuginformation = true;
+            }
+
+			if (keys[SDL_SCANCODE_2]) {
+				showDebuginformation = false;
+            }
         }
 
         void Draw(SDL_Renderer* renderer) override
@@ -114,23 +124,23 @@ class World: public GameObject
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); 
             SDL_RenderDebugText(renderer, 0, 0, "Esc to quit(on desktop)");
             SDL_RenderDebugText(renderer, 0, 40, "WASD to accelerate, break and turn. H for horn.");
-            SDL_RenderDebugText(renderer, 0, 60, "Try to herd the squirrel to the LEFT through the piggeons.");
 
-            char carPositionText[300] = {0};
-            snprintf(carPositionText, 300, "Car Position: %.2f, %.2f", _car->Dimensions.x, _car->Dimensions.y);
-            SDL_RenderDebugText(renderer, 0, 20, carPositionText);
+			if(showDebuginformation)
+			{
+				char carPositionText[300] = {0};
+				snprintf(carPositionText, 300, "Car Position: %.2f, %.2f", _car->Dimensions.x, _car->Dimensions.y);
+				SDL_RenderDebugText(renderer, 0, 20, carPositionText);
+				
+				char startledPiggeonsText[300] = {0};
+				snprintf(startledPiggeonsText, 300, "Startled Piggeons %d(%.2f%%)", _palomaSystem->startledPiggeons, (_palomaSystem->startledPiggeons / (float)PALOMAS_COUNT) * 100.);
+				SDL_RenderDebugText(renderer, 0, 80, startledPiggeonsText);
+			}
+
 			
-			char startledPiggeonsText[300] = {0};
-            snprintf(startledPiggeonsText, 300, "Startled Piggeons %d(%.2f%%)", _palomaSystem->startledPiggeons, (_palomaSystem->startledPiggeons / (float)PALOMAS_COUNT) * 100.);
-            SDL_RenderDebugText(renderer, 0, 80, startledPiggeonsText);
 
             if(_palomaSystem->squirrelPosition.x < 1150)
        		{
        			SDL_RenderDebugText(renderer, 100, 100, "YOU CATCHED THE SQUIRREL!!");
-       		} else {
-       			char text[300] = {0};
-       			sprintf(text, "squirrel position %.2f, %.2f", _palomaSystem->squirrelPosition.x, _palomaSystem->squirrelPosition.y);
-       			SDL_RenderDebugText(renderer, 100, 100, text);
        		}
             
         }
