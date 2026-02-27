@@ -18,6 +18,7 @@ run_main: build
 build_web: clean
 	mkdir -p docs
 	$(EMCC) main.cpp libSDL3.a $(WEB_FLAGS) -o $(WEB_OUT)
+	(cd docs && zip -r index.zip .)
 
 run_web: build_web
 	emrun $(WEB_OUT)

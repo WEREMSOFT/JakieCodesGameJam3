@@ -45,8 +45,8 @@ class Car: public MovingGameObject
 
             SDL_DestroySurface(surface);
 
-			Dimensions.x = 1596.;
-			// Dimensions.x = 5096.;
+			// Dimensions.x = 1596.;
+			Dimensions.x = 5096.;
             Dimensions.y = 1561.;
         }
 
