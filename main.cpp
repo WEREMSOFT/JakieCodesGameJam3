@@ -122,6 +122,18 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         {
 			showWireframe = !showWireframe;
         }
+
+		if(event->key.scancode == SDL_SCANCODE_I)
+		{
+			auto world = (World*)appstate;
+			world->splashScreen->showInstructions = !world->splashScreen->showInstructions;
+		}
+
+		if(event->key.scancode == SDL_SCANCODE_SPACE)
+		{
+			auto world = (World*)appstate;
+			world->splashScreen->showInstructions = false;
+		}
     }
 
     return SDL_APP_CONTINUE;  /* carry on with the program! */

@@ -12,8 +12,8 @@ class World: public GameObject
 {
     Car* _car;
     BackGround* _backGround;
-	SplashScreen* splashScreen;
     public:
+		SplashScreen* splashScreen;
     	PalomaSystem* _palomaSystem;
 		bool showDebuginformation = false;
 		bool showHelp = false;
@@ -74,10 +74,6 @@ class World: public GameObject
 
 			const bool* keys = SDL_GetKeyboardState(NULL);
 
-            if(keys[SDL_SCANCODE_SPACE])
-            {
-				splashScreen->Texture = NULL;
-            }
         }
 
         void Draw(SDL_Renderer* renderer) override
@@ -96,7 +92,7 @@ class World: public GameObject
 			else
 			{
 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); 
-				SDL_RenderDebugText(renderer, 10, 580, "Press F1 hide/show help.");
+				SDL_RenderDebugText(renderer, 10, 580, "Press F1 hide/show help. Press I to show story.");
 			}
 
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); 

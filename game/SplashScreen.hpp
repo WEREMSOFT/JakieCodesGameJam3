@@ -7,22 +7,48 @@ class SplashScreen: public GameObject
 {
 	float elapsedFrameTime = 0;
 	int splashScreenFrame = 0;
+	SDL_Texture* _instructions;
+	SDL_FRect instructionsDimensions;
+	SDL_FRect instructionsSourceRect;
+	
     public:
-    SplashScreen(SDL_Renderer* renderer, SDL_Texture* pTexture)
+    
+	bool showInstructions = true;
+
+	SplashScreen(SDL_Renderer* renderer, SDL_Texture* pTexture)
     {
         Tag = "SplashScreen";
         Type = GameObjectTypeEnum::DRAWABLE;
+
+		_instructions = pTexture;
+
+		char* pngPath = NULL;
+
+		SDL_asprintf(&pngPath, "%sAssets/Nuts-and-furry.png", SDL_GetBasePath());
+
+		SDL_Surface* surface = SDL_LoadPNG(pngPath);
+
+		SDL_free(pngPath);
 
         SDL_Point texture_size = {0};
 
         texture_size.x = pTexture->w;
         texture_size.y = pTexture->h;
 
-		Dimensions = {(800 - 81) / 2, (600 - 32) / 2, 81, 32};
+		Dimensions.h = SourceRect.h = surface->h;
+		Dimensions.w = SourceRect.w = surface->w;
+		SourceRect.x = 0;
+		SourceRect.y = 0;
 
-        SourceRect = {0, 417, 81, 32};
+		Texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-        Texture = pTexture;
+		SDL_DestroySurface(surface);
+
+		instructionsDimensions = {(800 - 81) / 2, 520, 81, 32};
+
+        instructionsSourceRect = {0, 417, 81, 32};
+
+        // Texture = pTexture;
     }
 
 	void Update(float deltaTime)
@@ -40,10 +66,14 @@ class SplashScreen: public GameObject
 
 	void Draw(SDL_Renderer* renderer)
 	{
-		if(Texture == NULL) return;
-		SourceRect.x = splashScreenFrame * 82;
+		if(!showInstructions) return;
+
 		SDL_RenderTexture(renderer, Texture, &SourceRect, &Dimensions);
+
+
+		instructionsSourceRect.x = splashScreenFrame * 82;
+		SDL_RenderTexture(renderer, _instructions, &instructionsSourceRect, &instructionsDimensions);
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); 
-		SDL_RenderDebugText(renderer, 320, 320, "Press Space to Start");
+		SDL_RenderDebugText(renderer, 320, 560, "Press Space to Start");
 	}
 };
