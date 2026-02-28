@@ -84,20 +84,22 @@ class World: public GameObject
         {
             GameObject::Draw(renderer);
 			
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); 
 			
 			if(showHelp)
 			{
+				SDL_SetRenderDrawColor(renderer, 0, 255, 100, SDL_ALPHA_OPAQUE); 
 				SDL_RenderDebugText(renderer, 0, 0, "Esc to quit(on desktop)");
 				SDL_RenderDebugText(renderer, 0, 20, "WASD to accelerate, break and turn. H for horn.");
 				SDL_RenderDebugText(renderer, 420, 10, "<--- Use the signal to track the squirrel.");
+				SDL_RenderDebugText(renderer, 0, 300, "<--- Squirrel Jail is in that direction.");
 			}
 			else
 			{
+				SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); 
 				SDL_RenderDebugText(renderer, 10, 580, "Press F1 hide/show help.");
 			}
 
-
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); 
 			if(showDebuginformation)
 			{
 				char carPositionText[300] = {0};
