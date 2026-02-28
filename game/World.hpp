@@ -89,7 +89,7 @@ class World: public GameObject
 				SDL_RenderDebugText(renderer, 420, 10, "<--- Use the signal to track the squirrel.");
 				SDL_RenderDebugText(renderer, 0, 300, "<--- Squirrel Jail is in that direction.");
 			}
-			else
+			if(!showHelp && !splashScreen->showInstructions)
 			{
 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); 
 				SDL_RenderDebugText(renderer, 10, 580, "Press F1 hide/show help. Press I to show story.");
