@@ -106,7 +106,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 		if(event->key.scancode == SDL_SCANCODE_F6)
 		{
 			auto world = (World*)appstate;
-			world->_palomaSystem->isGameWin = true; 
+			if(world->showDebuginformation)
+			{
+				world->_palomaSystem->isGameWin = true; 
+			}
 		}
 
 		if(event->key.scancode == SDL_SCANCODE_2)
