@@ -10,15 +10,13 @@
 
 class World: public GameObject
 {
-    SDL_Texture *texture = NULL;
-    SDL_Texture *splashScreenTexture = NULL;
     Car* _car;
     BackGround* _backGround;
-    PalomaSystem* _palomaSystem;
-	bool showSplashScreen = true;
-	
+	SplashScreen* splashScreen;
     public:
+    	PalomaSystem* _palomaSystem;
 		bool showDebuginformation = false;
+		bool showHelp = false;
 
         World(SDL_Renderer* renderer)
         {
@@ -51,39 +49,9 @@ class World: public GameObject
             auto treesFront = new ForeGround(renderer);
             AddChild(treesFront);
 
-			CreateSplashScreen(renderer);
+			splashScreen = new SplashScreen(renderer, Texture);
+			AddChild(splashScreen);  
         }
-
-		void CreateSplashScreen(SDL_Renderer* renderer)
-		{
-			SDL_Point texture_size = {0};
-
-			char* pngPath = NULL;
-
-			SDL_asprintf(&pngPath, "%sAssets/Instructions.png", SDL_GetBasePath());
-
-			SDL_Surface* surface = SDL_LoadPNG(pngPath);
-
-			SDL_free(pngPath);
-
-			texture_size.x = surface->w;
-			texture_size.y = surface->h;
-
-			Dimensions.w = SourceRect.w = surface->w;
-			Dimensions.h = SourceRect.h = surface->h;
-			SourceRect.x = 0;
-			SourceRect.y = 0;
-
-			splashScreenTexture = SDL_CreateTextureFromSurface(renderer, surface);
-
-			SDL_DestroySurface(surface);
-		}
-
-		void DrawSplashScreen(SDL_Renderer* renderer)
-		{
-			SDL_FRect position = {(800 - 320) / 2, (600 - 240) / 2, 320, 240};
-			SDL_RenderTexture(renderer, splashScreenTexture, NULL, &position);
-		}
 
         ~World()
         {
@@ -93,7 +61,12 @@ class World: public GameObject
 
         void Update(float deltaTime) override
         {
+			if(_palomaSystem->isGameWin)
+			{
+				return;
+			}
             GameObject::Update(deltaTime);
+
             auto carPosition = _car->GetWorldPositions();
             // Camera follows car
             Dimensions.x = -_car->Dimensions.x + 412;
@@ -103,44 +76,48 @@ class World: public GameObject
 
             if(keys[SDL_SCANCODE_SPACE])
             {
-                showSplashScreen = false;
-            }
-
-            if (keys[SDL_SCANCODE_1]) {
-				showDebuginformation = true;
-            }
-
-			if (keys[SDL_SCANCODE_2]) {
-				showDebuginformation = false;
+				splashScreen->Texture = NULL;
             }
         }
 
         void Draw(SDL_Renderer* renderer) override
         {
             GameObject::Draw(renderer);
-			if(showSplashScreen)
-				DrawSplashScreen(renderer);
+			
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); 
+			
+			if(showHelp)
+			{
+				SDL_RenderDebugText(renderer, 0, 0, "Esc to quit(on desktop)");
+				SDL_RenderDebugText(renderer, 0, 20, "WASD to accelerate, break and turn. H for horn.");
+				SDL_RenderDebugText(renderer, 420, 10, "<--- Use the signal to track the squirrel.");
+			}
+			else
+			{
+				SDL_RenderDebugText(renderer, 10, 580, "Press F1 hide/show help.");
+			}
 
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); 
-            SDL_RenderDebugText(renderer, 0, 0, "Esc to quit(on desktop)");
-            SDL_RenderDebugText(renderer, 0, 40, "WASD to accelerate, break and turn. H for horn.");
 
 			if(showDebuginformation)
 			{
 				char carPositionText[300] = {0};
 				snprintf(carPositionText, 300, "Car Position: %.2f, %.2f", _car->Dimensions.x, _car->Dimensions.y);
-				SDL_RenderDebugText(renderer, 0, 20, carPositionText);
+				SDL_RenderDebugText(renderer, 550, 40, carPositionText);
 				
 				char startledPiggeonsText[300] = {0};
 				snprintf(startledPiggeonsText, 300, "Startled Piggeons %d(%.2f%%)", _palomaSystem->startledPiggeons, (_palomaSystem->startledPiggeons / (float)PALOMAS_COUNT) * 100.);
-				SDL_RenderDebugText(renderer, 0, 80, startledPiggeonsText);
+				SDL_RenderDebugText(renderer, 550, 60, startledPiggeonsText);
 			}
 
-			
-
-            if(_palomaSystem->squirrelPosition.x < 1150)
+            if(_palomaSystem->isGameWin)
        		{
-       			SDL_RenderDebugText(renderer, 100, 100, "YOU CATCHED THE SQUIRREL!!");
+				SDL_FRect sourceRect = {0, 448, 255, 64};
+				SDL_FRect targetRect = {(800 - 255) / 2, (600 - 64) / 2, 255, 64};
+				SDL_RenderTexture(renderer, Texture, &sourceRect, &targetRect);
+       			SDL_RenderDebugText(renderer, 300, 290, "YOU CATCHED THE SQUIRREL!!");
+				char startledPiggeonsText[300] = {0};
+				snprintf(startledPiggeonsText, 300, "Startled Piggeons %d(%.2f%%)", _palomaSystem->startledPiggeons, (_palomaSystem->startledPiggeons / (float)PALOMAS_COUNT) * 100.);
+				SDL_RenderDebugText(renderer, 300, 300, startledPiggeonsText);
        		}
             
         }

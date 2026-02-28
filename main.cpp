@@ -96,11 +96,26 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         {
             return SDL_APP_SUCCESS;
         }
-    }
 
-    if(event->type == SDL_EVENT_KEY_DOWN)
-    {
-        if(event->key.scancode == SDL_SCANCODE_1)
+		if(event->key.scancode == SDL_SCANCODE_F1)
+		{
+			auto world = (World*)appstate;
+			world->showHelp = !world->showHelp; 
+		}
+
+		if(event->key.scancode == SDL_SCANCODE_F6)
+		{
+			auto world = (World*)appstate;
+			world->_palomaSystem->isGameWin = true; 
+		}
+
+		if(event->key.scancode == SDL_SCANCODE_2)
+		{
+			auto world = (World*)appstate;
+			world->showDebuginformation = !world->showDebuginformation; 
+		}
+		
+		if(event->key.scancode == SDL_SCANCODE_1)
         {
 			showWireframe = !showWireframe;
         }
@@ -132,10 +147,10 @@ void printFPSInformation(SDL_Renderer* renderer, float deltaTime)
     average /= FPS_HISTORY;
 
     snprintf(fpsText, 100, "fps: %.3f", average);
-    SDL_RenderDebugText(renderer, 300, 0, fpsText);
+    SDL_RenderDebugText(renderer, 650, 0, fpsText);
     
     snprintf(frameTimeText, 100, "frameTime: %.3f", deltaTime);
-    SDL_RenderDebugText(renderer, 300, 20, frameTimeText);
+    SDL_RenderDebugText(renderer, 650, 20, frameTimeText);
 }
 
 SDL_AppResult SDL_AppIterate(void *appstate)

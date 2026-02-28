@@ -54,6 +54,7 @@ public:
 	int startledPiggeons = 0;
 	Animal *Palomas;
 	SDL_Texture *Texture;
+	bool isGameWin = false;
 	PalomaSystem(SDL_Texture *texture, Car *car)
 	{
 		Palomas = (Animal *)calloc(ENTITY_COUNT, sizeof(Animal));
@@ -161,6 +162,12 @@ public:
 				// }
 				squirrelPosition.x = Palomas[i].Dimensions.x;
 				squirrelPosition.y = Palomas[i].Dimensions.y;
+
+				if(squirrelPosition.x < 1150)
+				{
+					isGameWin = true;
+				}
+
 				ConstraintSquirrelToMap(&Palomas[i].Dimensions, &Palomas[i].Angle, &Palomas[i].direction);
 				break;
 			}
