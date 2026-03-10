@@ -72,8 +72,9 @@ class Piggeon
 
     static void UpdateAnimation(Animal* paloma, float deltaTime, float elapsedFrametime)
     {
+    	static const int FrameStart = 128 + 32;
         paloma->elapsedIddleTime += deltaTime;
-        paloma->SourceRect.y = 32 * paloma->Animation;
+        paloma->SourceRect.y = 32 * paloma->Animation + FrameStart;
 
 
         if(paloma->baseY == 0)

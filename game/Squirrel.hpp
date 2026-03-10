@@ -22,7 +22,8 @@ class Squirrel
 
     static inline void Update(Animal* squirrel, float deltaTime, Car* _car, float elapsedFrametime, AnimationDefinition* squirrelAnimations)
     {
-        static const int FrameStart = 128 + 32;
+        // static const int FrameStart = 128 + 32;
+        static const int FrameStart = 0;
         squirrel->elapsedIddleTime += deltaTime;
         squirrel->SourceRect.y = 32 * squirrel->Animation + FrameStart;
 
